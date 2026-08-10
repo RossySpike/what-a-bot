@@ -1,1 +1,4 @@
-.ignore
+.ignore/
+node_modules/
+dist/
+spa.traineddata
