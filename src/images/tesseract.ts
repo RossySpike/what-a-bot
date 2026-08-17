@@ -2,10 +2,19 @@ import Tesseract, { createWorker, OEM } from "tesseract.js";
 import { type Base64 } from "./types.js";
 
 export async function initTesseract(): Promise<Tesseract.Worker> {
-  const worker = await createWorker('spa', OEM.DEFAULT, { logger: (m) => console.log(m), errorHandler: (err) => console.log(err) });
+  // const worker = await createWorker('spa', OEM.DEFAULT,
+  //   {
+  //     logger: (m) => console.log(m)
+  //     , errorHandler: (err) => console.log(err)
+  //   });
+  const worker = await createWorker('spa', OEM.DEFAULT,
+    {
+      errorHandler: (err) => console.log(err)
+    });
   return worker;
 
 }
+export const TESSERACT_WORKER = await initTesseract();
 // Theres no point in destroying the worker as of this version
 // await worker.setParameters({
 // })

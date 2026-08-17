@@ -1,0 +1,79 @@
+services:
+  redis:
+    container_name: what-a-bot-redis
+    image: "redislabs/redismod"
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - what-a-bot-network
+  postgres:
+    container_name: what-a-bot-postgres
+    image: postgres:15-alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql
+    # set shared memory limit when using docker compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: evolution
+    networks:
+      - what-a-bot-network
+
+  evolution-api:
+    container_name: what-a-bot-evolution
+    image: evoapicloud/evolution-api:latest
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_URL: http://localhost:8080
+      AUTHENTICATION_API_KEY: ${EVO_AUTHENTICATION_API_KEY}
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://postgres:example@postgres:5432/evolution?schema=public
+      DATABASE_CLIENT_NAME: evolution_db
+
+      CACHE_REDIS_ENABLED: true
+      CACHE_REDIS_URI: redis://redis:6379
+      CACHE_REDIS_PREFIX_KEY: evomap
+      WEBSOCKET_GLOBAL_EVENTS: true
+      WEBSOCKET_ENABLED: true
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - what-a-bot-network
+  what-a-bot:
+    container_name: what-a-bot-backend
+    build: .
+    restart: always
+    env_file: ./.env
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - evolution-api
+    networks:
+      - what-a-bot-network
+
+networks:
+  what-a-bot-network:
+    driver: bridge
+volumes:
+  db-data: # Creates the volume
+    driver: local # Stores the volume inside the host
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #
