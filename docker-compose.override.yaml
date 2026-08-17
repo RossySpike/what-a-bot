@@ -56,8 +56,11 @@ services:
   what-a-bot:
     container_name: what-a-bot-backend
     build:
-      target: production
+      target: development
     restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
     env_file: ./.env
     ports:
       - ${PORT}:${PORT}

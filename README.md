@@ -90,10 +90,22 @@ curl $BACKEND_DOMAIN/health
 
 However, this doesnt check if the instance has `MESSAGES_UPSERT` event enabled.
 
+## Developing:
+
+1. Make sure to have installed both `node` and `pnpm`.
+2. Run:
+
+```bash
+docker compose --file docker-compose.override.yaml up -d
+```
+
+3. Set up your **Evolution API** instance.
+4. Enjoy coding! :D
+
 ## GOALS:
 
-- Check for necessary events inside `/health` endpoint.
-- Improve type safety like sanitizing received data from endpoints (i.e checking if its a valid Base64 string) and improve error handling (theres a lot of uncatched Promises).
-- Add proper logging.
-- Create a `dev` container with hot reloading.
-- Create a message queue to feed multiple tesseract's workers in order to work with multiple messages.
+- [ ] Check for necessary events inside `/health` endpoint.
+- [ ] Improve type safety like sanitizing received data from endpoints (i.e checking if its a valid Base64 string) and improve error handling (theres a lot of uncatched Promises).
+- [ ] Add proper logging.
+- [x] Create a `dev` container with hot reloading.
+- [ ] Create a message queue to feed multiple tesseract's workers in order to work with multiple messages.

@@ -18,7 +18,7 @@ export const ROUTES_MAP: Endpoints = {
 
       try {
 
-        const logResult = logToWhatsapp(`Health checked`);
+        const logResult = logToWhatsapp(`Health checked:\n \`\`\`${JSON.stringify(body.data, null, 2)}\`\`\``);
         body.message = 'Log sent to whatsapp';
       } catch (error) {
 

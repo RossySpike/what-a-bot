@@ -44,6 +44,6 @@ const server = createServer((req, res) => {
 
 });
 server.listen(PORT, () => {
-  console.log("servidor prendido papa");
+  console.log("servidor prendido papa :D");
   fetch(`http://localhost:${PORT}/health`)
 })
